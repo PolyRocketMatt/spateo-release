@@ -9,16 +9,21 @@ import numpy as np
 from anndata import AnnData
 from pyvista import PolyData
 
-from spateo.tdr import (
-    add_model_labels,
-    center_to_zero,
-    collect_models,
-    construct_pc,
-    merge_models,
-    translate_model,
-)
-
 from .three_dims_plots import three_d_multi_plot
+
+
+def _load_tdr_model():
+    """Load tdr model utilities lazily to avoid circular imports during package initialization."""
+    from ....tdr.models import (
+        add_model_labels,
+        center_to_zero,
+        collect_models,
+        construct_pc,
+        merge_models,
+        translate_model,
+    )
+
+    return add_model_labels, center_to_zero, collect_models, construct_pc, merge_models, translate_model
 
 
 def _check_cpos_in_multi_plot(
@@ -150,6 +155,7 @@ def multi_models(
     """
     adata_list = adata[0]
     adata_list = adata_list if isinstance(adata_list, list) else [adata_list]
+    add_model_labels, center_to_zero, collect_models, construct_pc, merge_models, _ = _load_tdr_model()
 
     # Construct a point cloud model
     pcs, ids, keys, cmaps = [], [], [], []
@@ -333,6 +339,8 @@ def deformation(
     text_kwargs: Optional[dict] = None,
     **kwargs,
 ):
+    add_model_labels, center_to_zero, collect_models, construct_pc, _, translate_model = _load_tdr_model()
+
     adata_list = adata[0]
     adata_list = adata_list if isinstance(adata_list, list) else [adata_list]
 

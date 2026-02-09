@@ -15,8 +15,6 @@ try:
 except ImportError:
     from typing_extensions import Literal
 
-from spateo.tdr import collect_models
-
 from ..colorlabel import vega_10
 from .three_dims_plotter import (
     _set_jupyter,
@@ -457,6 +455,9 @@ def three_d_multi_plot(
                 * Output an obj file, please enter a filename ending with ``.obj``.
                 * Output a vtkjs file, please enter a filename without format.
     """
+
+    from ....tdr.models import collect_models
+
     models = model if isinstance(model, (MultiBlock, list)) else [model]
     keys = key if isinstance(key, list) else [key]
     cpos = cpo if isinstance(cpo, list) else [cpo]
@@ -689,6 +690,8 @@ def three_d_animate(
                 * Output an obj file, please enter a filename ending with ``.obj``.
                 * Output a vtkjs file, please enter a filename without format.
     """
+
+    from ....tdr.models import collect_models
 
     plotter_kws = dict(
         jupyter=False if jupyter is False else True,

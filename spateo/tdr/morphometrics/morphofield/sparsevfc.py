@@ -9,8 +9,8 @@ import numpy as np
 import pandas as pd
 from anndata import AnnData
 
-from spateo.alignment import get_optimal_mapping_relationship
 from spateo.alignment.methods import paste_pairwise_align
+from spateo.alignment.utils import get_optimal_mapping_relationship
 from spateo.logging import logger_manager as lm
 from spateo.tdr.interpolations import get_X_Y_grid
 
