@@ -72,20 +72,29 @@ def compute_curl(f_jac, X):
 
 
 def compute_torsion(vf, f_jac, X):
-    """Calculate torsion."""
+    """Calculate torsion vector tau*B (3D only)."""
 
     def _torsion(v, J, a):
-        """only works in 3D"""
-        v = v[:, None] if v.ndim == 1 else v
-        tau = np.outer(v, a).dot(J.dot(a)) / np.linalg.norm(np.outer(v, a)) ** 2
-        return tau
+        v = np.asarray(v).reshape(3,)
+        a = np.asarray(a).reshape(3,)
+        J = np.asarray(J).reshape(3, 3)
+
+        c = np.cross(v, a)               # v × a
+        denom = float(c @ c)             # ||v×a||^2
+
+        if denom < eps:                  # curvature ~ 0 => torsion undefined; return 0-vector
+            return np.zeros(3)
+
+        tau = float((c @ (J @ a)) / denom)
+        B = c / np.sqrt(denom)           # normalize using same denom
+        return tau * B                   # torsion vector
 
     if X.shape[1] != 3:
-        raise Exception(f"torsion is only defined in 3 dimension.")
+        raise ValueError("torsion is only defined in 3D.")
 
-    n = len(X)
+    n = X.shape[0]
+    tor = np.zeros((n, 3), dtype=float)
 
-    tor = np.zeros((n, X.shape[1], X.shape[1]))
     v, J, a_, a = compute_acceleration(vf, f_jac, X, return_all=True)
 
     for i in tqdm(range(n), desc="Calculating torsion"):
