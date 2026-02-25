@@ -19,7 +19,7 @@ install-all: install-dev install-docs install
 
 test:
 	rm -f .coverage
-	nosetests --verbose --with-coverage --cover-package spateo \
+	pytest --verbose --cov=spateo \
 		tests/* \
 		tests/io/* \
 		tests/preprocessing/* \

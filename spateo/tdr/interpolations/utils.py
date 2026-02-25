@@ -4,7 +4,6 @@ import numpy as np
 from anndata import AnnData
 
 from ...logging import logger_manager as lm
-from ...tools.utils import in_hull, polyhull
 
 
 def get_X_Y_grid(
@@ -32,6 +31,7 @@ def get_X_Y_grid(
             the input data points.
     """
     lm.main_info("Learn a continuous mapping from space to gene expression pattern")
+    from ...tools.utils import in_hull, polyhull
 
     X, Y = adata.obsm["spatial"] if X is None else X, adata[:, genes].X if Y is None else Y
 

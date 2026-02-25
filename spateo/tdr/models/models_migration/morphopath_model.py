@@ -166,6 +166,7 @@ def construct_trajectory_X(
     trajectory_color: Union[str, list, dict] = "gainsboro",
     tip_color: Union[str, list, dict] = "orangered",
     alpha: Union[float, list, dict] = 1.0,
+    return_merged: bool = True,
 ) -> Tuple[Any, Optional[str]]:
     """
     Reconstruction of cell developmental trajectory model.
@@ -267,7 +268,7 @@ def construct_trajectory_X(
         alpha=alpha,
     )
 
-    trajectory_model = merge_models([streamlines, arrows])
+    trajectory_model = merge_models([streamlines, arrows]) if return_merged else [streamlines, arrows]
     return trajectory_model, plot_cmap
 
 
@@ -283,6 +284,7 @@ def construct_trajectory(
     trajectory_color: Union[str, list, dict] = "gainsboro",
     tip_color: Union[str, list, dict] = "orangered",
     alpha: float = 1.0,
+    return_merged: bool = True,
 ) -> Tuple[Any, Optional[str]]:
     """
     Reconstruction of cell developmental trajectory model based on cell fate prediction.
@@ -331,6 +333,7 @@ def construct_trajectory(
         trajectory_color=trajectory_color,
         tip_color=tip_color,
         alpha=alpha,
+        return_merged=return_merged,
     )
 
     return trajectory_model, plot_cmap
